@@ -1,0 +1,21 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+max_line_length = 120
+tab_width = 4
+trim_trailing_whitespace = true
+
+[{*.yaml,*.yml}]
+indent_size = 2
+
+[*.php]
+ij_php_comma_after_last_argument = true
+ij_php_comma_after_last_array_element = true
+ij_php_comma_after_last_closure_use_var = true
+ij_php_comma_after_last_match_arm = true
+ij_php_comma_after_last_parameter = true

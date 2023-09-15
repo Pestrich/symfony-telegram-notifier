@@ -1,0 +1,225 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Telegram notifier API",
+        "description": "Symfony приложение для отправки уведомлений в Telegram",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Локальный сервер"
+        }
+    ],
+    "paths": {
+        "/get-me": {
+            "post": {
+                "tags": [
+                    "Telegram Bot"
+                ],
+                "description": "Возвращает данные бота",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/GetMeBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/GetMeResponse"
+                    }
+                }
+            }
+        },
+        "/send-message": {
+            "post": {
+                "tags": [
+                    "Telegram Bot"
+                ],
+                "description": "Отправляет сообщение в чат через бота",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/SendMessageBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SendMessageResponse"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ApiResponseBody": {
+                "type": "object",
+                "description": "Базовая структура ответа API",
+                "required": [
+                    "success",
+                    "payload",
+                    "errors"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "description": "Статус обработки запроса",
+                        "example": true
+                    },
+                    "payload": {
+                        "type": "object",
+                        "description": "Может содержать полезные данные, полученные в ходе запроса"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "description": "Массив с ошибками. Возвращается в случаях, когда в поле success установленно false",
+                        "example": [],
+                        "items": {
+                            "allOf": [
+                                {
+                                    "type": "string",
+                                    "example": "В запросе переданы некорректные параметры"
+                                }
+                            ],
+                            "minItems": 0
+                        }
+                    }
+                }
+            },
+            "GetMeResponseBody": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ApiResponseBody"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "payload": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1000000000
+                                    },
+                                    "is_bot": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "TestBot"
+                                    },
+                                    "username": {
+                                        "type": "string",
+                                        "example": "test_bot"
+                                    },
+                                    "can_join_groups": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "can_read_all_group_messages": {
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "supports_inline_queries": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "SendMessageResponseBody": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ApiResponseBody"
+                    }
+                ]
+            }
+        },
+        "requestBodies": {
+            "GetMeBody": {
+                "description": "Параметры для отправки сообщения",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "description": "Токен от Telegram бота",
+                                    "example": "<token>"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "SendMessageBody": {
+                "description": "Параметры для отправки сообщения",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "description": "Токен от Telegram бота",
+                                    "example": "<token>"
+                                },
+                                "chat_id": {
+                                    "type": "string",
+                                    "description": "Идентификатор от Telegram чата",
+                                    "example": "<chat_id>"
+                                },
+                                "text": {
+                                    "type": "string",
+                                    "description": "Текст сообщения",
+                                    "example": "Тестовая строка"
+                                },
+                                "parse_mode": {
+                                    "type": "string",
+                                    "description": "Режим разбора текста",
+                                    "example": "MarkdownV2",
+                                    "enum": [
+                                        "MarkdownV2",
+                                        "HTML"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "GetMeResponse": {
+                "description": "Структура ответа при получении данных бота",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/GetMeResponseBody"
+                        }
+                    }
+                }
+            },
+            "SendMessageResponse": {
+                "description": "Структура ответа при отправке сообщения",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/SendMessageResponseBody"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Telegram Bot",
+            "description": "Операции с Telegram ботом"
+        }
+    ]
+}

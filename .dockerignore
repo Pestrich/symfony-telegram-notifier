@@ -1,0 +1,9 @@
+.idea
+.git
+.dockerignore
+.editorconfig
+.env.example
+.gitignore
+docker-compose.yml
+openapi.json
+README.md
